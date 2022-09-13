@@ -175,4 +175,55 @@ router.post('/getBaseChart',(req,res,next)=>{
 
 
 })
+
+// 根据参数获取图表数据
+router.post('/getKnnChart',(req,res,next)=>{
+    let date = req.body.date.split(',')
+    let param = req.body.params.split(',')
+    let option = []
+    // async.each(param, function(param_i, callback1){
+    //     //遍历第二层，每个槽号对应一条曲线
+    //     Charts.getBaseChart({date:date,param:param_i},(err,data)=>{
+    //         if(err){
+    //             return next(err);
+    //         }
+    //         option.push({
+    //             name: param_i,
+    //             data: data
+    //         })
+    //         callback1(null)
+    //     })    
+    // }, function(err){
+    //     res.send({
+    //         code: 200,
+    //         msg: '请求成功',
+    //         data: option
+    //     })
+    // })
+    Charts.getKnnChart({date:date},(err,data) => {
+        if(err){
+            return next(err);
+        }
+        param.forEach((param_i) => {
+            let params_data = []
+            data.forEach(time_i => {
+                params_data.push({
+                    time: time_i.time,
+                    body: '兰州铝业电解铝板块二厂(200kA)三车间二工区3039#电解槽',
+                    params: param_i,
+                    value: time_i[param_i]
+                })
+            });
+            option.push({
+                name: param_i,
+                data: params_data
+            })
+        })
+        res.send({
+            code: 200,
+            msg: '请求成功',
+            data: option
+        })
+    })
+})
 module.exports=router
