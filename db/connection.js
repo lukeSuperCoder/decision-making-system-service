@@ -20,7 +20,7 @@ const connectionDB=(sql,params,cb)=>{
                 console.log("数据库连接失败",err);
                 return;
             }
-            console.log("数据库连接成功");
+            console.log("数据库连接成功,\n入参：    "+JSON.stringify(params)+"\nsql:    "+JSON.stringify(sql));
             connection.query(sql,params,cb)
         })
 

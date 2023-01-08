@@ -15,9 +15,13 @@
 
 #### 使用说明
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+1.  在根目录下 node index.js
+2.  提交代码需要如下三步
+    git add .
+    git commit -m "简要描述要提交的代码内容"
+    git push origin master 
+3.  拉取代码
+    git pull
 
 #### 参与贡献
 
