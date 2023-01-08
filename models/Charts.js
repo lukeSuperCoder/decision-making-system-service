@@ -10,6 +10,11 @@ class Charts{
     static getKnnChart(data,cb){
         DB("SELECT * FROM `knn_database` where time BETWEEN ? and ? and number = '3039' order by time",[data.date[0],data.date[1]],cb)
     }
+
+    // 获取异常值分析数据
+    static getAbnChart(data,cb){
+        DB("SELECT * FROM `abnormal_database` where time BETWEEN ? and ? and number = '3039' order by time",[data.date[0],data.date[1]],cb)
+    }
 }
 
 module.exports=Charts
