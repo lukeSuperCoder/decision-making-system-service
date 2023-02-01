@@ -17,9 +17,9 @@ class Users{
     }
     // 更新用户信息
     static updateuser(data,cb){
-        let sql='update user_database set userno=?, username=?, likename=?, email=?, lasttime=NOW() where id = ?';
+        let sql='update user_database set userno=?, username=?, likename=?, email=?, issuper=?, lasttime=NOW() where id = ?';
         // let params=[];
-        DB(sql,[data.userno,data.username,data.likename,data.email,data.id],cb)
+        DB(sql,[data.userno,data.username,data.likename,data.email,data.issuper,data.id],cb)
     }
     // 删除用户信息
     static deleteuser(data,cb){
@@ -29,7 +29,7 @@ class Users{
     }
     // 添加一篇文章
     static create(data,cb){
-        DB('insert into user_database(userno,username,likename,email,createtime,lasttime) values(?,?,?,?,?,?)',[data.userno,data.username,data.likename,data.email,new Date(),new Date()],cb)
+        DB('insert into user_database(userno,username,likename,email,password,issuper,createtime,lasttime) values(?,?,?,?,?,?,?,?)',[data.userno,data.username,data.likename,data.email,data.password,data.issuper,new Date(),new Date()],cb)
     }
 }
 
