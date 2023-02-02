@@ -10,10 +10,16 @@ router.get('/getusers',(req,res,next)=>{
         if(err){
             return next(err);
         }
-        res.send({
-            code: 200,
-            msg: '请求成功',
-            data: data
+        Users.count(req.query,(err,count)=>{
+            if(err){
+                return next(err);
+            }
+            res.send({
+                code: 200,
+                msg: '请求成功',
+                data: data,
+                total: count[0].total
+            })
         })
     })
 })
@@ -46,6 +52,20 @@ router.get('/deleteuser',(req,res,next)=>{
     })
 })
 
+// 删除多个用户
+router.post('/deleteuserid',(req,res,next)=>{
+    Users.deleteuserid(req.body,(err,data)=>{
+        if(err){
+            return next(err);
+        }
+        res.send({
+            code: 200,
+            msg: '请求成功',
+            data: data
+        })
+    })
+})
+
 // 新增某个用户
 router.post('/insertuser',(req,res,next)=>{
     Users.create(req.body,(err,data)=>{
@@ -57,6 +77,28 @@ router.post('/insertuser',(req,res,next)=>{
             msg: '请求成功',
             data: []
         })
+    })
+})
+//登录
+router.post('/login',(req,res,next)=>{
+    Users.login(req.body,(err,data)=>{
+        if(err){
+            return next(err);
+        }
+        if(data.length!==0) {
+            res.send({
+                code: 200,
+                msg: '请求成功',
+                data: data
+            })
+        } else {
+            res.send({
+                code: 500,
+                msg: '用户名或密码错误',
+                data: []
+            })
+        }
+        
     })
 })
 module.exports=router
