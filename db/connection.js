@@ -4,7 +4,7 @@ const mysql = require('mysql');
 db={
     host:'localhost',
     user:'root',
-    password:'123456',
+    password:'root',
     database:'analysis_system',
     max_connections: 500
 }

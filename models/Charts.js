@@ -8,7 +8,7 @@ class Charts{
 
     // 获取knn分析数据
     static getKnnChart(data,cb){
-        DB("SELECT * FROM `"+data.fun+"_database` where time BETWEEN ? and ? order by time",[data.date[0],data.date[1]],cb)
+        DB("SELECT * FROM `"+data.fun+"` where time BETWEEN ? and ? order by time",[data.date[0],data.date[1]],cb)
     }
 
     static getKnnTable(data, cb) {
