@@ -282,4 +282,43 @@ router.post('/getAbnChart',(req,res,next)=>{
         })
     })
 })
+//获取载入数据
+router.get('/getload',(req,res,next)=>{
+    Charts.getLoadParams(req.query,(err,data)=>{
+        if(err){
+            return next(err);
+        }
+        res.send({
+            code: 200,
+            msg: '请求成功',
+            data: data
+        })
+    })
+})
+// 更新载入数据
+router.post('/setload',(req,res,next)=>{
+    Charts.setLoadParams(req.body,(err,data)=>{
+        if(err){
+            return next(err);
+        }
+        res.send({
+            code: 200,
+            msg: '请求成功',
+            data: []
+        })
+    })
+})
+// 删除载入数据
+router.get('/deleteload',(req,res,next)=>{
+    Charts.deleteLoadParams(req.query,(err,data)=>{
+        if(err){
+            return next(err);
+        }
+        res.send({
+            code: 200,
+            msg: '请求成功',
+            data: data
+        })
+    })
+})
 module.exports=router
