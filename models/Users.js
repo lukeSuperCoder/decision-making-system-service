@@ -12,7 +12,7 @@ class Users{
             DB(sql,[start, start+parseInt(params.pageSize)],cb)
         } else {
             sql='select * from user_database where username like CONCAT("%", ?, "%") limit ?,?';
-            DB(sql,[params.name, start, start+parseInt(params.pageSize)],cb)
+            DB(sql,[params.name, start, parseInt(params.pageSize)],cb)
         }
         
         // let params=[];

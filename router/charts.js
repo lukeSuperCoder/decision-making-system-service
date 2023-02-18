@@ -180,32 +180,55 @@ router.post('/getBaseChart',(req,res,next)=>{
 router.post('/getKnnChart',(req,res,next)=>{
     let date = req.body.date.split(',')
     let param = req.body.params.split(',')
+    let number = req.body.numbers.split(',')
     let option = []
-    Charts.getKnnChart({date:date},(err,data) => {
-        if(err){
-            return next(err);
-        }
-        param.forEach((param_i) => {
-            let params_data = []
-            data.forEach(time_i => {
-                params_data.push({
-                    time: time_i.time,
-                    body: '兰州铝业电解铝板块二厂(200kA)三车间二工区3039#电解槽',
-                    params: param_i,
-                    value: time_i[param_i]
+    if(req.body.chart==='4') {
+        Charts.getKnnTable({date:date,pageNo:req.body.pageNo,pageSize:req.body.pageSize,param:param,number:number},(err,data) => {
+            if(err){
+                return next(err);
+            }
+            Charts.count({date:date,number:number,param:param},(err,count)=>{
+                if(err){
+                    return next(err);
+                }
+                res.send({
+                    code: 200,
+                    msg: '请求成功',
+                    data: data,
+                    total: count[0].total
                 })
-            });
-            option.push({
-                name: param_i,
-                data: params_data
+            })
+        })  
+    } else {
+        Charts.getKnnChart({date:date, fun:req.body.fun},(err,data) => {
+            if(err){
+                return next(err);
+            }
+            param.forEach((param_i) => {
+                let params_data = []
+                data.forEach(time_i => {
+                    if(number.indexOf(time_i.number)>=0) {
+                        const time = time_i.time.getFullYear().toString()+'-'+(time_i.time.getMonth() + 1).toString()+'-'+time_i.time.getDate().toString()
+                        params_data.push({
+                            time: time,
+                            body: '兰州铝业电解铝板块一厂(400kA)五车间二工区'+time_i.number+'#电解槽',
+                            params: param_i,
+                            value: time_i[param_i]
+                        })
+                    }      
+                });
+                option.push({
+                    name: param_i,
+                    data: params_data
+                })
+            })
+            res.send({
+                code: 200,
+                msg: '请求成功',
+                data: option
             })
         })
-        res.send({
-            code: 200,
-            msg: '请求成功',
-            data: option
-        })
-    })
+    }    
 })
 
 // 根据参数获取图表数据

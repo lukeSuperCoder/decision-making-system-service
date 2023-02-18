@@ -15,7 +15,7 @@ router.get('/getNoMenu',(req,res,next)=>{
             msg: '请求成功',
             data: [
                 {
-                    label: '电解槽',
+                    label: '兰州铝业',
                     value: "0",
                     children: data
                 }

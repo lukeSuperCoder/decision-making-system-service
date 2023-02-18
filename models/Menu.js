@@ -3,7 +3,7 @@ const DB = require('../db/connection');
 class Menu{
     // 获取槽号菜单
     static getNoMenu(cb){
-        let sql='select body as label, body as value from origin_database GROUP BY body order by body';
+        let sql='select body as label, substr(body,25,4) as value from origin_database GROUP BY body order by body';
         let params=[];
         DB(sql,params,cb)
     }
