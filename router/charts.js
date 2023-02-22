@@ -282,6 +282,39 @@ router.post('/getAbnChart',(req,res,next)=>{
         })
     })
 })
+//获取互相关数据
+router.post('/gethxgchart',(req,res,next)=>{
+    let param = req.body.params.split(',')
+    let option = []
+
+    Charts.getHxgChart(req.body,(err,data)=>{
+        if(err){
+            return next(err);
+        }
+        param.forEach((param_i) => {
+            let params_data = []
+            if(param_i!=='x') {
+                data.forEach(time_i => {
+                    params_data.push({
+                        time: time_i.time,
+                        body: param_i,
+                        params: param_i,
+                        value: time_i[param_i]
+                    })     
+                });
+                option.push({
+                    name: param_i,
+                    data: params_data
+                })
+            }                     
+        })
+        res.send({
+            code: 200,
+            msg: '请求成功',
+            data: option
+        })
+    })
+})
 //获取载入数据
 router.get('/getload',(req,res,next)=>{
     Charts.getLoadParams(req.query,(err,data)=>{
