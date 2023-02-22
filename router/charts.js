@@ -328,6 +328,34 @@ router.get('/getload',(req,res,next)=>{
         })
     })
 })
+
+//获取值载入数据
+router.get('/getvalueload',(req,res,next)=>{
+    Charts.getValueLoad(req.query,(err,data)=>{
+        if(err){
+            return next(err);
+        }
+        res.send({
+            code: 200,
+            msg: '请求成功',
+            data: data
+        })
+    })
+})
+
+//获取特征分析数据
+router.get('/gettzgc',(req,res,next)=>{
+    Charts.getTzgc(req.query,(err,data)=>{
+        if(err){
+            return next(err);
+        }
+        res.send({
+            code: 200,
+            msg: '请求成功',
+            data: data
+        })
+    })
+})
 // 更新载入数据
 router.post('/setload',(req,res,next)=>{
     Charts.setLoadParams(req.body,(err,data)=>{

@@ -44,6 +44,14 @@ class Charts{
             DB("SELECT * from load_data WHERE name= ?",[data.name],cb)
         }
     }
+    //获取值载入的参数
+    static getValueLoad(data, cb) {
+        DB("SELECT num_leaves,eta,max_depth,min_data_in_leaf from `map-value` WHERE name= ?",[data.name],cb)
+    }
+    //获取特征分析数据
+    static getTzgc(data, cb) {
+        DB("SELECT param, CONVERT(`"+data.name+"`, SIGNED) as value from `tzgc-database`  ORDER BY value desc",[data.name],cb)
+    }
     //更新载入的参数
     static setLoadParams(data, cb) {
         DB("REPLACE INTO load_data(start_time, name, end_time, numbers) VALUES (?,?,?,?)",[data.start_time,data.name,data.end_time,data.numbers],cb)
