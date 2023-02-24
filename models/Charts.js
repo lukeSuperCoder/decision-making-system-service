@@ -1,4 +1,5 @@
 const DB = require('../db/connection');
+const { param } = require('../router/charts');
 
 class Charts{
     // 获取基本图表分析数据
@@ -8,10 +9,14 @@ class Charts{
 
     // 获取knn分析数据
     static getKnnChart(data,cb){
+        console.log(data.fun);
         DB("SELECT * FROM `"+data.fun+"` where time BETWEEN ? and ? order by time",[data.date[0],data.date[1]],cb)
     }
     // 获取knn分析数据
     static getHxgChart(data,cb){
+        if(data.params==='all') {
+            data.params = '`all`'
+        }
         DB("SELECT x as time,"+data.params+" FROM `"+data.fun+"`",[data.params,data.fun],cb)
     }
     static getKnnTable(data, cb) {
@@ -25,6 +30,16 @@ class Charts{
     }
     static count(data,cb){
         let sql='SELECT count(*) as total FROM `knn_database` where time BETWEEN ? and ? and number in ('+data.number.toString()+')';
+        DB(sql,[data.date[0], data.date[1]],cb)
+    }
+
+    static getJcTable(data, cb) {
+        var start = (data.pageNo - 1) * 10;
+        let sql='SELECT DATE_FORMAT(time,"%Y-%m-%d") as time,'+data.param+' FROM `'+data.tablename+'` where time BETWEEN ? and ? order by time limit ?,?';
+        DB(sql,[data.date[0], data.date[1],start, parseInt(data.pageSize)],cb)
+    }
+    static jccount(data,cb) {
+        let sql='SELECT count(*) as total FROM `'+data.tablename+'` where time BETWEEN ? and ? order by time';
         DB(sql,[data.date[0], data.date[1]],cb)
     }
 
@@ -46,7 +61,11 @@ class Charts{
     }
     //获取值载入的参数
     static getValueLoad(data, cb) {
-        DB("SELECT num_leaves,eta,max_depth,min_data_in_leaf from `map-value` WHERE name= ?",[data.name],cb)
+        if(data.type==='1') {
+            DB("SELECT "+data.fun+" from `map-value` WHERE name= ?",[data.name],cb)
+        } else {
+            DB("SELECT num_leaves,eta,max_depth,min_data_in_leaf from `map-value` WHERE name= ?",[data.name],cb)
+        }
     }
     //获取特征分析数据
     static getTzgc(data, cb) {

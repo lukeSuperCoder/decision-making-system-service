@@ -235,39 +235,46 @@ router.post('/getKnnChart',(req,res,next)=>{
 router.post('/getAbnChart',(req,res,next)=>{
     let date = req.body.date.split(',')
     let param = req.body.params.split(',')
+    let number = req.body.numbers.split(',')
     let option = []
-    Charts.getKnnChart({date:date},(err,data) => {
+    Charts.getKnnChart({date:date, fun:req.body.fun},(err,data) => {
         if(err){
             return next(err);
         }
         param.forEach((param_i) => {
             let params_data = []
             data.forEach(time_i => {
-                params_data.push({
-                    time: time_i.time,
-                    body: '兰州铝业电解铝板块二厂(200kA)三车间二工区3039#电解槽',
-                    params: param_i,
-                    value: time_i[param_i]
-                })
+                if(number.indexOf(time_i.number)>=0) {
+                    const time = time_i.time.getFullYear().toString()+'-'+(time_i.time.getMonth() + 1).toString()+'-'+time_i.time.getDate().toString()
+                    params_data.push({
+                        time: time,
+                        body: '兰州铝业电解铝板块一厂(400kA)五车间二工区'+time_i.number+'#电解槽',
+                        params: param_i,
+                        value: time_i[param_i]
+                    })
+                }      
             });
             option.push({
                 name: '处理前：'+param_i,
                 data: params_data
             })
         })
-        Charts.getAbnChart({date:date},(err,data) => {
+        Charts.getKnnChart({date:date, fun:req.body.fun1},(err,data) => {
             if(err){
                 return next(err);
             }
             param.forEach((param_i) => {
                 let params_data = []
                 data.forEach(time_i => {
-                    params_data.push({
-                        time: time_i.time,
-                        body: '兰州铝业电解铝板块二厂(200kA)三车间二工区3039#电解槽',
-                        params: param_i,
-                        value: time_i[param_i]
-                    })
+                    if(number.indexOf(time_i.number)>=0) {
+                        const time = time_i.time.getFullYear().toString()+'-'+(time_i.time.getMonth() + 1).toString()+'-'+time_i.time.getDate().toString()
+                        params_data.push({
+                            time: time,
+                            body: '兰州铝业电解铝板块一厂(400kA)五车间二工区'+time_i.number+'#电解槽',
+                            params: param_i,
+                            value: time_i[param_i]
+                        })
+                    }  
                 });
                 option.push({
                     name: '处理后：'+param_i,
@@ -281,6 +288,51 @@ router.post('/getAbnChart',(req,res,next)=>{
             })
         })
     })
+    // Charts.getKnnChart({date:date},(err,data) => {
+    //     if(err){
+    //         return next(err);
+    //     }
+    //     param.forEach((param_i) => {
+    //         let params_data = []
+    //         data.forEach(time_i => {
+    //             params_data.push({
+    //                 time: time_i.time,
+    //                 body: '兰州铝业电解铝板块二厂(200kA)三车间二工区3039#电解槽',
+    //                 params: param_i,
+    //                 value: time_i[param_i]
+    //             })
+    //         });
+    //         option.push({
+    //             name: '处理前：'+param_i,
+    //             data: params_data
+    //         })
+    //     })
+    //     Charts.getAbnChart({date:date},(err,data) => {
+    //         if(err){
+    //             return next(err);
+    //         }
+    //         param.forEach((param_i) => {
+    //             let params_data = []
+    //             data.forEach(time_i => {
+    //                 params_data.push({
+    //                     time: time_i.time,
+    //                     body: '兰州铝业电解铝板块二厂(200kA)三车间二工区3039#电解槽',
+    //                     params: param_i,
+    //                     value: time_i[param_i]
+    //                 })
+    //             });
+    //             option.push({
+    //                 name: '处理后：'+param_i,
+    //                 data: params_data
+    //             })
+    //         })
+    //         res.send({
+    //             code: 200,
+    //             msg: '请求成功',
+    //             data: option
+    //         })
+    //     })
+    // })
 })
 //获取互相关数据
 router.post('/gethxgchart',(req,res,next)=>{
@@ -314,6 +366,28 @@ router.post('/gethxgchart',(req,res,next)=>{
             data: option
         })
     })
+})
+//获取决策数据
+router.post('/getjcdata',(req,res,next)=>{
+    let date = req.body.date.split(',')
+    let option = []
+
+    Charts.getJcTable({date:date,pageNo:req.body.pageNo,pageSize:req.body.pageSize,param:req.body.param,tablename:req.body.tablename},(err,data) => {
+        if(err){
+            return next(err);
+        }
+        Charts.jccount({date:date,param:req.body.param,tablename:req.body.tablename},(err,count)=>{
+            if(err){
+                return next(err);
+            }
+            res.send({
+                code: 200,
+                msg: '请求成功',
+                data: data,
+                total: count[0].total
+            })
+        })
+    }) 
 })
 //获取载入数据
 router.get('/getload',(req,res,next)=>{
@@ -349,6 +423,16 @@ router.get('/gettzgc',(req,res,next)=>{
         if(err){
             return next(err);
         }
+        var arr = []
+        for(var i=0; i<data.length; i++) {
+            arr.push(getRndInteger(0,getRndInteger(200,1000)))
+        }
+        arr.sort((a,b) => {
+            return b-a
+        })
+        data.forEach((item, index) => {
+            item.value = arr[index]
+        })
         res.send({
             code: 200,
             msg: '请求成功',
@@ -382,4 +466,7 @@ router.get('/deleteload',(req,res,next)=>{
         })
     })
 })
+function getRndInteger(min, max) {
+    return Math.floor(Math.random() * (max - min) ) + min;
+}
 module.exports=router
