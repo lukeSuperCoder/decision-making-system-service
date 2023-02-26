@@ -440,6 +440,33 @@ router.get('/gettzgc',(req,res,next)=>{
         })
     })
 })
+
+//获取特征分析数据
+router.post('/getlastjc',(req,res,next)=>{
+    Charts.getLastJcCount(req.body,(err,data)=>{
+        if(err){
+            return next(err);
+        }
+        var body = req.body
+        body.count = data[0].count-1
+        Charts.getLastJc(body,(err,data)=>{
+            if(err){
+                return next(err);
+            }
+            
+            res.send({
+                code: 200,
+                msg: '请求成功',
+                data: data
+            })
+        })
+        // res.send({
+        //     code: 200,
+        //     msg: '请求成功',
+        //     data: data
+        // })
+    })
+})
 // 更新载入数据
 router.post('/setload',(req,res,next)=>{
     Charts.setLoadParams(req.body,(err,data)=>{

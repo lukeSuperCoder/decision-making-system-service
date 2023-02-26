@@ -71,6 +71,14 @@ class Charts{
     static getTzgc(data, cb) {
         DB("SELECT param, CONVERT(`"+data.name+"`, SIGNED) as value from `tzgc-database`  ORDER BY value desc",[data.name],cb)
     }
+    static getLastJcCount(data, cb) {
+        let sql='SELECT count(*) as count FROM `'+data.tablename+'`';
+        DB(sql,[],cb)
+    }
+    static getLastJc(data, cb) {
+        let sql='SELECT '+data.params+' FROM `'+data.tablename+'` limit '+data.count+', 1';
+        DB(sql,[],cb)
+    }
     //更新载入的参数
     static setLoadParams(data, cb) {
         DB("REPLACE INTO load_data(start_time, name, end_time, numbers) VALUES (?,?,?,?)",[data.start_time,data.name,data.end_time,data.numbers],cb)
