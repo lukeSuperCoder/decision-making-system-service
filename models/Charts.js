@@ -77,6 +77,11 @@ class Charts{
     static getTzgc(data, cb) {
         DB("SELECT param, CONVERT(`"+data.name+"`, SIGNED) as value from `tzgc-database`  ORDER BY value desc",[data.name],cb)
     }
+    
+    //获取评价数据
+    static getPjValue(data, cb) {
+        DB("SELECT "+data.fun+" from `pjzb-database`  where target = ?",[data.name],cb)
+    }
     static getLastJcCount(data, cb) {
         let sql='SELECT count(*) as count FROM `'+data.tablename+'`';
         DB(sql,[],cb)

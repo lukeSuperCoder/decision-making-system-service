@@ -442,6 +442,34 @@ router.get('/gettzgc',(req,res,next)=>{
 })
 
 //获取特征分析数据
+router.post('/getPjValue',(req,res,next)=>{
+    Charts.getPjValue(req.body,(err,data)=>{
+        if(err){
+            return next(err);
+        }
+        let row = data[0]
+        let arr = []
+        let name_arr = req.body.type.split(',')
+        name_arr.forEach((item) => {
+            for(o in row) {
+                arr.push({
+                    '决策模型': item,
+                    'MAE': row[item+'-MAE'],
+                    'MAPE': row[item+'-MAPE'],
+                    'RMSE': row[item+'-RMSE'],
+                })
+                return
+            }
+        })
+        res.send({
+            code: 200,
+            msg: '请求成功',
+            data: arr
+        })
+    })
+})
+
+//获取特征分析数据
 router.post('/getlastjc',(req,res,next)=>{
     Charts.getLastJcCount(req.body,(err,data)=>{
         if(err){
