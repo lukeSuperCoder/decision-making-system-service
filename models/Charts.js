@@ -87,8 +87,8 @@ class Charts{
         DB(sql,[],cb)
     }
     static getLastJc(data, cb) {
-        let sql='SELECT '+data.params+' FROM `'+data.tablename+'` limit '+data.count+', 1';
-        DB(sql,[],cb)
+        let sql='SELECT '+data.params+' FROM `'+data.tablename+'` where time = ? limit 1';
+        DB(sql,[data.date],cb)
     }
     //更新载入的参数
     static setLoadParams(data, cb) {
