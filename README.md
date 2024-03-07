@@ -1,7 +1,7 @@
-# decision-making-system-nodejs
+# decision-making-system-serveice
 
 #### 介绍
-分析系统后台 nodejs+express
+分析研判平台后台管理系统服务端框架,主要使用nodejs+express搭建，mysql数据库
 
 #### 软件架构
 软件架构说明
@@ -9,13 +9,13 @@
 
 #### 安装教程
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+1.  nodejs
+2.  mysql
+3.  express
 
 #### 使用说明
 
-1.  在根目录下 node index.js
+1.  运行方法： 在根目录下 node index.js
 2.  提交代码需要如下三步
     git add .
     git commit -m "简要描述要提交的代码内容"
